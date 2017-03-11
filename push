@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+HERE=$(dirname $0)
+
+rsync \
+	--archive \
+	--partial \
+	--progress \
+	--delete \
+	--exclude '.*.swp' \
+	--exclude .DS_Store \
+	--exclude .git \
+	--exclude md-to-manifest.py \
+	--exclude push \
+	--delete-excluded \
+	-- \
+	$HERE quad_mixtape@ssh.phx.nearlyfreespeech.net:

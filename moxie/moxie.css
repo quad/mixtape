@@ -1,0 +1,115 @@
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+div {
+    animation: 250ms 1 fade-in;
+}
+
+.initing {
+    height: 25vh;
+    width: 25vh;
+    background-color: #333;
+    margin: auto;
+    position: absolute;
+    top: calc(50% - (25vh / 2));
+    left: calc(50% - (25vh / 2));
+    animation: 1s infinite ease-in-out rotate-square;
+}
+
+@keyframes rotate-square {
+    0% {
+        transform: perspective(50vh) rotateX(0deg) rotateY(0deg);
+    }
+    50% {
+        transform: perspective(50vh) rotateX(-180.1deg) rotateY(0deg);
+    }
+    100% {
+        transform: perspective(50vh) rotateX(-180deg) rotateY(-179.9deg);
+    }
+}
+
+@font-face {
+    font-family: "Inconsolata";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Inconsolata"), url(inconsolata.woff2) format("woff2"), url(inconsolata.ttf) format("truetype");
+}
+
+body {
+    color: #333;
+    background: snow;
+    margin: auto;
+    max-width: 90%;
+    font-family: "Inconsolata", monospace;
+    font-size: calc(1em + 1vw);
+}
+
+a {
+    text-decoration: none;
+}
+
+#header {
+    border-bottom: thin dotted black;
+    padding: 0 1vw;
+}
+
+#title {
+    font-size: calc(1em + 2vw);
+}
+
+#subtitle {
+    display: block;
+}
+
+#songs {
+    padding: 0;
+}
+
+#songs a {
+    color: inherit;
+}
+
+.song {
+    padding: 0.5vh 1vw;
+    cursor: pointer;
+    display: flex;
+    transition: color ease 250ms;
+    transition: background-color ease 250ms;
+}
+
+.song:hover {
+    color: snow;
+    background-color: #333;
+}
+
+.playing {
+    color: snow;
+    background-color: #333;
+}
+
+.name {
+    flex: auto;
+}
+
+.time {
+    text-align: right;
+    margin: auto 0 auto 1vw;
+}
+
+.loading .position:before {
+    content: "\2026";
+}
+
+.playing .position:after {
+    content: "/";
+}
+
+.paused .position:after {
+    content: "/";
+}
