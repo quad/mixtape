@@ -9112,7 +9112,15 @@ var _quad$moxie$Moxie$header_view = function (_p3) {
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$html$Html_Attributes$href(_p5._0),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$rel('noopener'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$target('_blank'),
+									_1: {ctor: '[]'}
+								}
+							}
 						}
 					},
 					{
