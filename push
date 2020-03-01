@@ -4,15 +4,13 @@ set -e
 
 HERE=$(dirname $0)
 
+git ls-files $HERE |
 rsync \
 	--archive \
 	--partial \
 	--progress \
 	--delete \
-	--exclude '.*.swp' \
-	--exclude .DS_Store \
-	--exclude .git \
-	--exclude md-to-manifest.py \
+	--files-from=- \
 	--exclude push \
 	--delete-excluded \
 	-- \
