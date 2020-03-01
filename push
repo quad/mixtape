@@ -13,5 +13,6 @@ rsync \
 	--files-from=- \
 	--exclude push \
 	--delete-excluded \
+	--filter 'protect .well-known/acme-challenge/' \
 	-- \
 	$HERE quad_mixtape@ssh.phx.nearlyfreespeech.net:
