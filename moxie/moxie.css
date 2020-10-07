@@ -45,7 +45,7 @@ body {
     color: #333;
     background: snow;
     margin: auto;
-    max-width: 90%;
+    max-width: min(80ch, 90%);
     font-family: "Inconsolata", monospace;
     font-size: calc(1em + 1vw);
 }
