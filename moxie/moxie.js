@@ -6842,6 +6842,7 @@ var $author$project$Moxie$onTimeUpdate = function (message) {
 					['target', 'currentTime']),
 				$author$project$Moxie$decodeTime)));
 };
+var $elm$html$Html$Attributes$preload = $elm$html$Html$Attributes$stringProperty('preload');
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$html$Html$Attributes$src = function (url) {
 	return A2(
@@ -6954,6 +6955,7 @@ var $author$project$Moxie$track_view = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$Attributes$src(track_url),
+							$elm$html$Html$Attributes$preload('metadata'),
 							$author$project$Moxie$onTimeUpdate(
 							$author$project$Moxie$Progress(index)),
 							$author$project$Moxie$onEnded(
