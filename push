@@ -15,4 +15,4 @@ rsync \
 	--delete-excluded \
 	--filter 'protect .well-known/acme-challenge/' \
 	-- \
-	$HERE quad_mixtape@ssh.phx.nearlyfreespeech.net:
+	$HERE quad_mixtape@ssh.nyc1.nearlyfreespeech.net:
