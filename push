@@ -4,12 +4,13 @@ set -e
 
 HERE=$(dirname $0)
 
-git ls-files $HERE |
+git ls-files -z $HERE |
 rsync \
 	--archive \
 	--partial \
 	--progress \
 	--delete \
+	--from0 \
 	--files-from=- \
 	--exclude push \
 	--delete-excluded \
