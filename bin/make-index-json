@@ -51,10 +51,11 @@ const ffprobe = async (filename) => {
       "json",
       filename,
     ],
+    stderr: "inherit",
   });
 
-  const { code, stdout, stderr } = await command.output();
-  console.assert(code === 0, "ffprobe failed");
+  const { code, stdout } = await command.output();
+  if (code !== 0) throw new Error("ffprobe failed");
 
   return JSON.parse(new TextDecoder().decode(stdout));
 };

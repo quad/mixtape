@@ -1,0 +1,77 @@
+#!/usr/bin/env -S deno run --allow-read --allow-run --ext=js
+
+import * as path from "jsr:@std/path";
+import { exists } from "jsr:@std/fs";
+
+const USAGE = `Usage: download-spotify-manifest <directory>
+
+Run me on a moxie directory where the manifest.json's URL is a Spotify URL.
+`;
+
+const MOXIE_DIRECTORY = path.join(
+  path.dirname(import.meta.filename),
+  "..",
+  "moxie",
+);
+const MOXIE_FILES = [
+  "inconsolata.woff2",
+  "index.html",
+  "moxie.css",
+  "moxie.js",
+];
+
+if (Deno.args.length != 1) {
+  console.log(USAGE);
+  Deno.exit(1);
+}
+
+const output_directory = Deno.args[0];
+
+for (const f of MOXIE_FILES) {
+  const src = path.relative(output_directory, path.join(MOXIE_DIRECTORY, f));
+  const dst = path.join(output_directory, f);
+
+  if (await exists(dst)) continue;
+
+  await Deno.symlink(src, dst);
+}
+
+const manifest_fn = path.join(output_directory, "manifest.json");
+const manifest = JSON.parse(await Deno.readTextFile(manifest_fn));
+const playlist_url = manifest.url;
+if (!playlist_url.startsWith("https://open.spotify.com/playlist/")) {
+  throw new Error(
+    `Manifest URL '${playlist_url}' does not appear to be Spotify playlist`,
+  );
+}
+
+const spotdl = new Deno.Command("spotdl", {
+  args: [
+    playlist_url,
+    "--bitrate",
+    "disable",
+    "--format",
+    "m4a",
+    "--output",
+    `${output_directory}/{list-position}`,
+  ],
+}).spawn();
+if (!(await spotdl.status).success) {
+  throw new Error(
+    "spotdl failed; did you 'pip install -f requirements.txt' into a virtualenv?",
+  );
+}
+
+const make_index = new Deno.Command(
+  path.join(import.meta.filename, "..", "./make-index-json"),
+  {
+    args: [
+      `${output_directory}/`,
+      "--output",
+      path.join(output_directory, "index.json"),
+    ],
+  },
+).spawn();
+if (!(await make_index.status).success) {
+  throw new Error("make-json-index failed; is deno in PATH environment?");
+}
