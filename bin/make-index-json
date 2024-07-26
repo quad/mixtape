@@ -1,0 +1,107 @@
+#!/usr/bin/env -S deno run --allow-read --allow-write --allow-run --ext=js
+
+import { expandGlob } from "jsr:@std/fs/expand-glob";
+import { parseArgs } from "jsr:@std/cli/parse-args";
+import * as path from "jsr:@std/path";
+
+const ARG_OPTIONS = {
+  alias: {
+    h: "help",
+    o: "output",
+    p: "prefix",
+  },
+  string: [
+    "output",
+    "prefix",
+  ],
+  default: {
+    output: "index.json",
+    prefix: "",
+  },
+};
+
+const USAGE = `Usage: ${path.basename(import.meta.filename)} <source directory>
+
+Make an index.json for moxie from a directory with .mp3 and .m4a files and an (optional) manifest.json
+
+Options:
+  -p, --prefix [path]  prefix references with [path] (default: "${ARG_OPTIONS.default.prefix}")
+  -o, --output [file]  output to [file] (default: "${ARG_OPTIONS.default.output}")
+  -h, --help           print this helpful usage information
+`;
+
+const readManifest = async (filename) => {
+  const data = JSON.parse(await Deno.readTextFile(filename));
+
+  return {
+    title: data.title || "A Moxie Mixtape!",
+    subtitle: data.subtitle || "Make a manifest.json",
+    url: data.url || "http://github.com/quad/moxie",
+  };
+};
+
+const ffprobe = async (filename) => {
+  const command = new Deno.Command("ffprobe", {
+    args: [
+      "-hide_banner",
+      "-v",
+      "warning",
+      "-show_format",
+      "-of",
+      "json",
+      filename,
+    ],
+  });
+
+  const { code, stdout, stderr } = await command.output();
+  console.assert(code === 0, "ffprobe failed");
+
+  return JSON.parse(new TextDecoder().decode(stdout));
+};
+
+const tag = async (filename) => {
+  const results = await ffprobe(filename);
+
+  return {
+    basename: path.basename(filename),
+    artist: results.format.tags.artist,
+    title: results.format.tags.title,
+    duration: parseFloat(results.format.duration),
+  };
+};
+
+const extract = async (directory) => {
+  const manifestFilename = path.join(directory, "manifest.json");
+  const audioGlob = path.join(directory, "*.+(mp3|m4a)");
+
+  return {
+    manifest: await readManifest(manifestFilename),
+    tags: await Array.fromAsync(expandGlob(audioGlob), ({ path }) => tag(path)),
+  };
+};
+
+const transform = (prefix, { manifest, tags }) => ({
+  title: manifest.title,
+  subtitle: manifest.subtitle,
+  url: manifest.url,
+  tracks: tags.map((t) => ({
+    url: path.join(prefix, t.basename),
+    artist: t.artist,
+    title: t.title,
+    duration: t.duration,
+  })),
+});
+
+const write = async (filename, data) =>
+  Deno.writeTextFile(filename, JSON.stringify(data));
+
+const flags = parseArgs(Deno.args, ARG_OPTIONS);
+
+if (flags.h || flags.help || flags._.length != 1) {
+  console.log(USAGE);
+  Deno.exit(1);
+}
+
+const input = await extract(flags._[0]);
+const output = await transform(flags.prefix, input);
+await write(flags.output, output);

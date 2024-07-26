@@ -1,4 +1,6 @@
 - .git
 - .gitattributes
 - .gitignore
+- .tool-versions
+- bin
 dir-merge,Ce /.gitignore
