@@ -2,18 +2,18 @@
 
 set -e
 
-HERE=$(dirname $0)
+FROM=$(dirname $0)
+TO=quad_mixtape@ssh.nyc1.nearlyfreespeech.net
 
-git ls-files -z $HERE |
 rsync \
 	--archive \
 	--partial \
 	--progress \
 	--delete \
-	--from0 \
-	--files-from=- \
-	--exclude push \
 	--delete-excluded \
+	--exclude "$(basename $0)" \
+	--filter 'dir-merge,e /.rsync-filter' \
 	--filter 'protect .well-known/acme-challenge/' \
+	$* \
 	-- \
-	$HERE quad_mixtape@ssh.nyc1.nearlyfreespeech.net:
+	"$FROM" "$TO:"
