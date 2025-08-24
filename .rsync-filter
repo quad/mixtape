@@ -1,6 +1,8 @@
 - .git
 - .gitattributes
-- .gitignore
+- .mise.toml
 - .tool-versions
 - bin
-dir-merge,Ce /.gitignore
+- push
+- requirements.txt
+dir-merge,-we .gitignore

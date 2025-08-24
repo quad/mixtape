@@ -9,9 +9,8 @@ rsync \
 	--archive \
 	--partial \
 	--progress \
-	--delete \
+	--delete-before \
 	--delete-excluded \
-	--exclude "$(basename $0)" \
 	--filter 'dir-merge,e /.rsync-filter' \
 	--filter 'protect .well-known/acme-challenge/' \
 	$* \
