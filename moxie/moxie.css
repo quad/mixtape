@@ -1,3 +1,7 @@
+:root {
+    color-scheme: light dark;
+}
+
 @keyframes fade-in {
     from {
         opacity: 0;
@@ -14,7 +18,7 @@ div {
 .initing {
     height: 25vh;
     width: 25vh;
-    background-color: #333;
+    background-color: light-dark(#333, snow);
     margin: auto;
     position: absolute;
     top: calc(50% - (25vh / 2));
@@ -43,8 +47,8 @@ div {
 }
 
 body {
-    color: #333;
-    background: snow;
+    color: light-dark(#333, snow);
+    background: light-dark(snow, #333);
     margin: auto;
     max-width: min(80ch, 90%);
     font-family: "Inconsolata", monospace;
@@ -85,13 +89,13 @@ a {
 }
 
 .song:hover {
-    color: snow;
-    background-color: #333;
+    color: light-dark(snow, #333);
+    background-color: light-dark(#333, snow);
 }
 
 .playing {
-    color: snow;
-    background-color: #333;
+    color: light-dark(snow, #333);
+    background-color: light-dark(#333, snow);
 }
 
 .name {

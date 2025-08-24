@@ -8,6 +8,10 @@
 		<link rel="alternate" type="application/rss+xml" title="RSS" href="http://quadhome.livejournal.com/data/rss?tag=mixtape" />
 		<link rel="alternate" type="application/atom+xml" title="Atom" href="http://quadhome.livejournal.com/data/atom?tag=mixtape" />
 		<style>
+			:root {
+				color-scheme: light dark;
+			}
+
 			@font-face {
 				font-family: 'Inconsolata';
 				font-style: normal;
@@ -20,8 +24,8 @@
 				font-size: calc(1em + 1vw);
 				margin: auto;
 				max-width: min(80ch, 90%);
-				color: #333;
-				background: snow;
+				color: light-dark(#333, snow);
+				background: light-dark(snow, #333);
 				text-align: center;
 			}
 
